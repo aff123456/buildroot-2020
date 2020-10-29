@@ -158,7 +158,7 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
 	if (len < sizeof(message)){
 		// use copy_from_user to read data from userland.
 		copy_from_user(message, buffer, len);
-		size_of_message = strlen(message);                 // store the length of the stored message
+		size_of_message = len;                 // store the length of the stored message
 		printk(KERN_INFO "Simple Driver: received %zu characters from the user\n", len);
 		
 		return len;
