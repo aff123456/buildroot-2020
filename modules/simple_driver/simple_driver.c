@@ -16,6 +16,7 @@
 #include <linux/kernel.h>         // Contains types, macros, functions for the kernel
 #include <linux/fs.h>             // Header for the Linux file system support
 #include <linux/uaccess.h>
+#include <linux/list.h>						// Header for linked lists
 
 #define  DEVICE_NAME "simple_driver" ///< The device will appear at /dev/simple_driver using this value
 #define  CLASS_NAME  "simple_class"        ///< The device class -- this is a character device driver
@@ -51,6 +52,17 @@ static struct file_operations fops =
 	.release = dev_release,
 };
 
+struct message_list = {
+	char message[256] = {0};
+	short size_of_message;
+	struct list_head list;
+};
+// inicializar a lista com um componente nulo
+struct message_list *p;
+p->size_of_message = 0;
+INIT_LIST_HEAD(&p->list);
+
+LIST_HEAD(myLinkedList);
 
 /** @brief The LKM initialization function
  *  The static keyword restricts the visibility of the function to within this C file. The __init
@@ -67,7 +79,7 @@ static int __init simple_init(void){
 		printk(KERN_ALERT "Simple Driver failed to register a major number\n");
 		return majorNumber;
 	}
-	
+
 	printk(KERN_INFO "Simple Driver: registered correctly with major number %d\n", majorNumber);
 
 	// Register the device class
@@ -77,7 +89,7 @@ static int __init simple_init(void){
 		printk(KERN_ALERT "Simple Driver: failed to register device class\n");
 		return PTR_ERR(charClass);          // Correct way to return an error on a pointer
 	}
-	
+
 	printk(KERN_INFO "Simple Driver: device class registered correctly\n");
 
 	// Register the device driver
@@ -88,9 +100,9 @@ static int __init simple_init(void){
 		printk(KERN_ALERT "Simple Driver: failed to create the device\n");
 		return PTR_ERR(charDevice);
 	}
-	
+
 	printk(KERN_INFO "Simple Driver: device class created correctly\n"); // Made it! device was initialized
-		
+
 	return 0;
 }
 
@@ -130,7 +142,7 @@ static int dev_open(struct inode *inodep, struct file *filep){
  */
 static ssize_t dev_read(struct file *filep, char *buffer, size_t len, loff_t *offset){
 	int error_count = 0;
-   
+
 	// copy_to_user has the format ( * to, *from, size) and returns 0 on success
 	// use copy_to_user to send data to userland.
 	error_count = copy_to_user(buffer, message, size_of_message);
@@ -160,12 +172,12 @@ static ssize_t dev_write(struct file *filep, const char *buffer, size_t len, lof
 		copy_from_user(message, buffer, len);
 		size_of_message = len;                 // store the length of the stored message
 		printk(KERN_INFO "Simple Driver: received %zu characters from the user\n", len);
-		
+
 		return len;
 	}else{
 		sprintf(message, "(0 letters)");
 		printk(KERN_INFO "Simple Driver: too many characters to deal with\n", len);
-		
+
 		return 0;
 	}
 }
