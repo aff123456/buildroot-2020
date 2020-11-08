@@ -2804,7 +2804,7 @@ endif
 ifneq "$(HOSTARCH)" "x86_64"
 /home/aluno/linuxdistro/buildroot-2020/output/build/buildroot-config/auto.conf: FORCE
 endif
-ifneq "$(BR2_VERSION_FULL)" "-g3f3f4cf-dirty"
+ifneq "$(BR2_VERSION_FULL)" "-gda8a4e5-dirty"
 /home/aluno/linuxdistro/buildroot-2020/output/build/buildroot-config/auto.conf: FORCE
 endif
 
