@@ -51,7 +51,7 @@ static struct file_operations fops =
 	.write = dev_write,
 	.release = dev_release,
 };
-
+/*
 struct message_list = {
 	char message[256] = {0};
 	short size_of_message;
@@ -63,7 +63,7 @@ p->size_of_message = 0;
 INIT_LIST_HEAD(&p->list);
 
 LIST_HEAD(myLinkedList);
-
+*/
 /** @brief The LKM initialization function
  *  The static keyword restricts the visibility of the function to within this C file. The __init
  *  macro means that for a built-in driver (not a LKM) the function is only used at initialization
