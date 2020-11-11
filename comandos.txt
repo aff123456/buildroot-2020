@@ -1,3 +1,13 @@
+comandos
+
+======
+buildroot:
+
+make
+make menuconfig
+make linux-menuconfig
+
+======
 emulador linux:
 
   qemu-system-arm -M versatilepb \
@@ -16,4 +26,22 @@ alternativo pra configurar internet:
   -dtb output/images/versatile-pb.dtb \
   -drive file=output/images/rootfs.ext2,if=scsi \
   -append "root=/dev/sda console=ttyAMA0,115200" -nographic
+
+======
+desligar emulador:
+
+killall qemu[tab]
+
+======
+verificar se o Makefile apresenta formatação correta:
+
+cat -e -t -v makefile_name
+
+=====
+linux:
+
+modprobe simple_driver
+
+
+
 
